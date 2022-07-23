@@ -6,6 +6,7 @@ import argparse
 
 #   general arguments
 parser = argparse.ArgumentParser(description='use xgboost to train a text classifier and do a predict')
+parser.add_argument('-fsave-model', type=str, default='./models/new%d.model')
 parser.add_argument('-auto', action='store_true', default=False)
 parser.add_argument('-cv', action='store_true', default=False)
 parser.add_argument('-predict-only', action='store_true', default=False)
@@ -22,7 +23,7 @@ parser.add_argument('-subsample', type=float, default=0.600)
 #parser.add_argument('-early-stopping-rounds', type=int, default=3)
 parser.add_argument('-colsample-bytree', type=float, default=0.7)
 parser.add_argument('-colsample-bylevel', type=float, default=0.7)
-parser.add_argument('-eta', type=float, default=0.1)            #   step size shrinkage used in update to prevents overfitting
+parser.add_argument('-eta', type=float, default=0.3)            #   step size shrinkage used in update to prevents overfitting
 #parser.add_argument('-max-leaf-nodes', type=int, default=80)
 parser.add_argument('-scale-pos-weight', type=float, default=12.0)
 parser.add_argument('-silent', type=int, default=0)
@@ -36,21 +37,28 @@ if __name__ == '__main__':
 
     source = 'features.npy'
 
-    n_pos = 125e4
-    n_neg = 125e4
+    m = int(125e4)
+    n_pos = int(1e6)
+    n_neg = int(1e6)
     n_full = n_pos + n_neg
-    n_test = 1e4
+    n_test = int(1e4)
 
-    X = np.load(os.path.join('data', source))
+    D = np.load(os.path.join('data', source))
 
-    Y = np.asarray([1] * n_pos + [-1] * n_neg)
+    X_pos = D[:n_pos]
+    X_neg = D[m: m + n_neg]
+    X = np.concatenate((X_pos, X_neg), axis=0)
+    print('load successfully...')
+
+    Y = np.asarray([1] * n_pos + [0] * n_neg)
 
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
 
     D_train = xgboost.DMatrix(X_train, label=Y_train)
 
-    D_test = xgboost.DMatrix(Y_test, label=Y_test)
+    D_test = xgboost.DMatrix(X_test, label=Y_test)
 
+    print('train model...')
     eval_list = [(D_train, 'train'), (D_test, 'test')]
 
     bst = xgboost.train(args.__dict__, D_train, args.num_round, eval_list)
