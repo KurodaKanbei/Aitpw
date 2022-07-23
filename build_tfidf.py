@@ -13,7 +13,7 @@ def solve(source, dest):
     
     corpus = []
     cnt = 0
-    with open(os.path.join('data', source), 'r') as f:
+    with open(os.path.join('data', source), 'r', encoding='UTF-8') as f:
         for line in f.readlines():
             line = line.strip('\n')
             corpus.append(line)

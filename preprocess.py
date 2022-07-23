@@ -8,12 +8,12 @@ cnt = 0
 def solve(source, test=False):
     global document
     global cnt
-    with open(os.path.join('data', source), 'r') as f:
+    with open(os.path.join('data', source), 'r', encoding='UTF-8') as f:
         for line in f.readlines():
-            line = line.strip('\n')
+            line = line.strip()
             if test:
                 pos = line.find(',')
-                line = line[pos + 1:];
+                line = line[pos + 1:]
             sentence = line.split(' ')
             words = []
             for word in sentence:
