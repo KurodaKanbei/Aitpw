@@ -1,15 +1,16 @@
 import os
 import sys
 import sklearn
-import pickle
 import numpy as np
 from sklearn import feature_extraction
+from sklearn.datasets import dump_svmlight_file
 from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
 import gensim.downloader
-d_features = 200
-glove_vectors = gensim.downloader.load('glove-twitter-' + str(d_features))
+d_features = 25
+glove_vectors = None
+# glove_vectors = gensim.downloader.load('glove-twitter-' + str(d_features))
 
-def solve(source, dest):
+def solve(source):
     
     corpus = []
     cnt = 0
@@ -23,6 +24,23 @@ def solve(source, dest):
     transformer = TfidfTransformer()
     
     tfidf = transformer.fit_transform(vectorizer.fit_transform(corpus))
+
+    print('output to ftrain_svm and ftest_svm...')
+
+    n_pos = int(125e4)
+    n_neg = int(125e4)
+    n_train = n_pos + n_neg
+    n_test = int(1e4)
+    test_labels = [0] * n_test
+    train_labels = [1] * n_pos + [0] * n_neg
+    ftrain_svm = open(os.path.join('data', 'train.svm.txt'), 'wb')
+    dump_svmlight_file(tfidf[0:n_train, :], train_labels, ftrain_svm)
+    ftrain_svm.close()
+
+    ftest_svm = open(os.path.join('data', 'test.svm.txt'), 'wb')
+    dump_svmlight_file(tfidf[-n_test:, :], test_labels, ftest_svm)
+    ftest_svm.close()
+    exit(0)
 
     word = vectorizer.get_feature_names_out()
 
@@ -49,7 +67,7 @@ def solve(source, dest):
 
     # with open(os.path.join('data', dest), 'wb') as f:
     #    pickle.dump(vectors, f)
-    np.save(os.path.join('data', dest), vectors)
+    # np.save(os.path.join('data', dest), vectors)
 
 if __name__ == '__main__':
-    solve(source = 'train_and_test_corpus.txt', dest = 'features.npy')
+    solve(source = 'train_and_test_corpus.txt')
