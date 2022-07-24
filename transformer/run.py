@@ -1,3 +1,4 @@
+from ast import arg
 from data import create_data
 from param import parse_args
 from transformers import AutoModelForSequenceClassification
@@ -17,12 +18,13 @@ if __name__ == "__main__":
     if args.create_data:
         create_data(args , "train_pos.txt", "train_neg.txt")
     
-    print(load_dataset('json', data_files="data/test.json")["train"])
 
 
-    model = AutoModelForSequenceClassification.from_pretrained("bert-base-cased", num_labels=2)
+    model = AutoModelForSequenceClassification.from_pretrained("bert-base-cased", num_labels=2).to(args.device)
     metric = load_metric("accuracy")
-    training_args = TrainingArguments(output_dir="outputs", evaluation_strategy="epoch")
+    training_args = TrainingArguments(output_dir="outputs", evaluation_strategy="epoch", 
+        per_device_eval_batch_size = 32, per_device_train_batch_size=args.batch_size_per_device, 
+        dataloader_num_workers=4, dataloader_drop_last=True)
 
     trainer = Trainer(
         model=model,
