@@ -1,6 +1,7 @@
 import os
 import sys
 import sklearn
+import random
 import numpy as np
 from sklearn import feature_extraction
 from sklearn.datasets import dump_svmlight_file
@@ -29,17 +30,30 @@ def solve(source):
 
     n_pos = int(125e4)
     n_neg = int(125e4)
-    n_train = n_pos + n_neg
+    n_full = n_pos + n_neg
     n_test = int(1e4)
     test_labels = [0] * n_test
-    train_labels = [1] * n_pos + [0] * n_neg
-    ftrain_svm = open(os.path.join('data', 'train.svm.txt'), 'wb')
-    dump_svmlight_file(tfidf[0:n_train, :], train_labels, ftrain_svm)
-    ftrain_svm.close()
+    full_labels = [1] * n_pos + [0] * n_neg
+
+    ffull_svm = open(os.path.join('data', 'full.svm.txt'), 'wb')
+    dump_svmlight_file(tfidf[:n_full], full_labels, ffull_svm)
+    ffull_svm.close()
 
     ftest_svm = open(os.path.join('data', 'test.svm.txt'), 'wb')
     dump_svmlight_file(tfidf[-n_test:, :], test_labels, ftest_svm)
     ftest_svm.close()
+
+    print('start split')
+    with open(os.path.join('data', 'full.svm.txt'), 'rb') as f:
+        f_train = open(os.path.join('data', 'train.svm.txt'), 'wb')
+        f_val = open(os.path.join('data', 'val.svm.txt'), 'wb')
+        for line in f.readlines():
+            if random.randint(0, 9) == 0:
+                f_val.write(line)
+            else:
+                f_train.write(line)
+        f_train.close()
+        f_val.close()
     exit(0)
 
     word = vectorizer.get_feature_names_out()
