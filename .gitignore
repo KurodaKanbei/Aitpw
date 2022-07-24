@@ -1,6 +1,6 @@
 /data
 *.log
-twitter-datasets.zip
+*.zip
 *.swp
 /models
 .idea
