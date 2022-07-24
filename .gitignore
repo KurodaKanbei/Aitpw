@@ -1,7 +1,8 @@
 /data
 *.log
-*.zip
+twitter-datasets.zip
 *.swp
 /models
 .idea
 /predictions
+/transformer
