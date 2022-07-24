@@ -79,26 +79,61 @@ def solve(source, test=False):
             sentence = line.split(' ')
             words = []
             for word in sentence:
-                if word == '<user>' or word == '<url>':
-                    continue
-                # _word = re.sub('[^a-zA-Z0-9]+', '', word)
-                if word == '' or word in stop_words:
+                if word == '<user>' or word == '<url>' or word == '':
                     continue
                 if word[0] == '#':
                     if word == '#':
                         continue
+                    #_word = re.sub('[^a-zA-Z0-9]+', '', word[1:])
                     for vocal in wordninja.split(word[1:]):
                         words.append(vocal)
-                elif word in contraction_mapping.keys():
-                    for vocal in contraction_mapping[word]:
+                    continue
+                # _word = re.sub('[^a-zA-Z0-9]+', '', word)
+                # if word == '' or word in stop_words:
+                #     continue
+                if word in contraction_mapping.keys():
+                    for vocal in contraction_mapping[word].split(' '):
                         words.append(vocal)
                 elif word in mispell_dict.keys():
-                    for vocal in mispell_dict[word]:
+                    for vocal in mispell_dict[word].split(' '):
                         words.append(vocal)
                 else:
                     words.append(word)
-            sentence = ' '.join(str(word) for word in words)
-            # print(sentence)
+            # sentence = ' '.join(str(re.sub('[^a-zA-Z0-9]+', '', word)) for word in words) + '\n'
+            sentence = []
+
+            i = 0
+            while i < len(words):
+                _word = re.sub('[^a-zA-Z0-9]+', '', words[i])
+                if _word == '' or _word == ' ':
+                    i += 1
+                    continue
+                if len(_word) >= 2:
+                    sentence.append(_word)
+                    i += 1
+                    continue
+                if len(_word) == 1:
+                    if _word == 'u':
+                        sentence.append(_word)
+                        i += 1
+                        continue
+                    else:
+                        j = i
+                        s = ''
+                        while j < len(words):
+                            _word = re.sub('[^a-zA-Z0-9]+', '', words[j])
+                            if len(_word) <= 1:
+                                s = s + _word
+                                j += 1
+                            else:
+                                break
+                        i = j
+                        for vocal in wordninja.split(s):
+                            sentence.append(vocal)
+
+            sentence = ' '.join(word for word in sentence) + '\n'
+
+            ''' 
             words = word_tokenize(sentence)
             sentence = []
             for word in words:
@@ -107,11 +142,15 @@ def solve(source, test=False):
                     continue
                 if len(_word) >= 3:
                     _word = lemmatizer.lemmatize(word, get_wordnet_pos(word))
+                _word = re.sub('[^a-zA-Z0-9]+', '', word)
+                if _word == '' or _word in stop_words:
+                    continue
                 sentence.append(_word)
             s = ' '.join(str(word) for word in sentence) + '\n'
+            '''
             cnt = cnt + 1
-            document.append(s)
-            if cnt % 1000 == 0:
+            document.append(sentence)
+            if cnt % 10000 == 0:
                 print(cnt)
 
 if __name__ == '__main__':
@@ -119,5 +158,5 @@ if __name__ == '__main__':
     solve(source = 'train_neg_full.txt')
     solve(source = 'test_data.txt', test=True)
     dest = 'train_and_test_corpus.txt'
-    with open(os.path.join('data', dest), 'w') as f:
+    with open(os.path.join('data', dest), 'w', encoding='UTF-8') as f:
         f.writelines(document)
