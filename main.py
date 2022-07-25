@@ -29,7 +29,7 @@ parser.add_argument('-subsample', type=float, default=1)
 #parser.add_argument('-early-stopping-rounds', type=int, default=3)
 parser.add_argument('-colsample-bytree', type=float, default=1)
 parser.add_argument('-colsample-bylevel', type=float, default=1)
-parser.add_argument('-eta', type=float, default=0.1)            #   step size shrinkage used in update to prevents overfitting
+parser.add_argument('-eta', type=float, default=0.08)            #   step size shrinkage used in update to prevents overfitting
 #parser.add_argument('-max-leaf-nodes', type=int, default=80)
 parser.add_argument('-scale-pos-weight', type=float, default=12.0)
 parser.add_argument('-silent', type=int, default=0)
