@@ -7,7 +7,7 @@ from sklearn import feature_extraction
 from sklearn.datasets import dump_svmlight_file
 from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
 import gensim.downloader
-d_features = 25
+d_features = 200
 glove_vectors = gensim.downloader.load('glove-twitter-' + str(d_features))
 
 def compute_diverse(vectors, top_k=10):
@@ -21,7 +21,7 @@ def compute_diverse(vectors, top_k=10):
         diversity = abs(np.linalg.det(np.matmul(A, np.transpose(A))))
         diverse.append((diversity, vectors[idx][0]))
     diverse = sorted(diverse, key=lambda x : x[0])
-    return  diverse[0][0]
+    return  diverse[0][1]
 
 def solve(source):
     
@@ -46,28 +46,38 @@ def solve(source):
             vocal.append(glove_vectors[word[i]])
         else:
             vocal.append(np.zeros(d_features)) 
-    vectors = np.zeros(shape=(len(corpus), d_features))
+    # vectors = np.zeros(shape=(len(corpus), d_features))
 
-    diverse = []
+    # diverse = []
+    cnt = 0
     for i in range(len(corpus)):
         if i % 10000 == 0:
             print(i)
-        cnt = 0
         vector = []
         row = tfidf.getrow(i)
         for j, idx in enumerate(row.indices):
             if glove_vectors.__contains__(word[idx]):
                 vector.append((idx, row.data[j], vocal[idx]))
-                cnt += 1
         vector = sorted(vector, key=lambda x : x[1])
         if len(vector) >= 10:
             # diverse.append(compute_diverse(vector, top_k=5))
-            idj = compute_diverse(vectors, top_k=10)
-            print(corpus[i])
-            print(word[idj])
+            idj = compute_diverse(vector, top_k=5)
+            # print(corpus[i])
+            # print(word[idj])
+            # cnt += 1
+            # if cnt >= 100:
+            #     break
+            sentence = corpus[i].split(' ')
+            for idx, _ in enumerate(sentence):
+                if _ == word[idj]:
+                    sentence[idx] = word[idj] + ' ' + word[idj]
+                    break
+            corpus[i] = ' '.join(word for word in sentence) + '\n'
+    with open(os.path.join('data', 'train_and_test_corpus_aug.txt'), 'w') as f:
+        f.writelines(corpus)
     # with open(os.path.join('data', dest), 'wb') as f:
     #    pickle.dump(vectors, f)
     # np.save(os.path.join('data', dest), vectors)
 
 if __name__ == '__main__':
-    solve(source = 'train_and_test_corpus.txt')
+    solve(source='train_and_test_corpus.txt')
