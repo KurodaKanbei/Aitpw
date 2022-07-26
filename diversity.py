@@ -10,10 +10,18 @@ import gensim.downloader
 d_features = 25
 glove_vectors = gensim.downloader.load('glove-twitter-' + str(d_features))
 
-def compute_diverse(vectors, top_k=2):
+def compute_diverse(vectors, top_k=10):
     vectors = vectors[-top_k:]
     M = np.zeros((top_k, d_features))
-
+    for idx in range(top_k):
+        M[idx, :] = vectors[idx][2]
+    diverse = []
+    for idx in range(top_k):
+        A = np.delete(M, idx, axis=0)
+        diversity = abs(np.linalg.det(np.matmul(A, np.transpose(A))))
+        diverse.append((diversity, vectors[idx][0]))
+    diverse = sorted(diverse, key=lambda x : x[0])
+    return  diverse[0][0]
 
 def solve(source):
     
@@ -49,11 +57,14 @@ def solve(source):
         row = tfidf.getrow(i)
         for j, idx in enumerate(row.indices):
             if glove_vectors.__contains__(word[idx]):
-                vector.append((row.data[j], vocal[idx]))
+                vector.append((idx, row.data[j], vocal[idx]))
                 cnt += 1
-        vector = sorted(vector, key=lambda x : x[0])
-        if len(vector) >= 2:
-            diverse.append(compute_diverse(vector))
+        vector = sorted(vector, key=lambda x : x[1])
+        if len(vector) >= 10:
+            # diverse.append(compute_diverse(vector, top_k=5))
+            idj = compute_diverse(vectors, top_k=10)
+            print(corpus[i])
+            print(word[idj])
     # with open(os.path.join('data', dest), 'wb') as f:
     #    pickle.dump(vectors, f)
     # np.save(os.path.join('data', dest), vectors)
