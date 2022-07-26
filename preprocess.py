@@ -1,12 +1,15 @@
 import os
 import wordninja
 import re
-import nltk
-from nltk.corpus import stopwords, wordnet
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
+# import nltk
+# from nltk.corpus import stopwords, wordnet
+# from nltk.tokenize import word_tokenize
+# from nltk.stem import WordNetLemmatizer
 document = []
 cnt = 0
+
+def filter(word):
+    return re.sub('[^a-zA-Z0-9]+', '', word)
 
 def get_wordnet_pos(word):
     """Map POS tag to first character lemmatize() accepts"""
@@ -68,8 +71,8 @@ def solve(source, test=False):
                     '2k18': '2018', 'qouta': 'quota', 'exboyfriend': 'ex boyfriend', 'airhostess': 'air hostess',
                     "whst": 'what', 'watsapp': 'whatsapp', 'demonitisation': 'demonetization',
                     'demonitization': 'demonetization', 'demonetisation': 'demonetization'}
-    stop_words = stopwords.words('english')
-    lemmatizer = WordNetLemmatizer()
+    # stop_words = stopwords.words('english')
+    # lemmatizer = WordNetLemmatizer()
     with open(os.path.join('data', source), 'r', encoding='UTF-8') as f:
         for line in f.readlines():
             line = line.strip()
@@ -130,7 +133,8 @@ def solve(source, test=False):
                         i = j
                         for vocal in wordninja.split(s):
                             sentence.append(vocal)
-
+            if len(sentence) == 0:
+                sentence = [filter(word) for word in line.split(' ')]
             sentence = ' '.join(word for word in sentence) + '\n'
 
             ''' 
