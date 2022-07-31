@@ -12,26 +12,26 @@ The dataset should have the following files:
 
 
 ## Project Structure
-data/ - original data and preprocessed data in txt format
-bert/ - classification scripts using bert
-    data/ - folder holding tokenized data
-    data.py/ - generating tokenized data
-    run.ipynb - google colab code for model finetuing
-    inference.ipynb - google colab code for model inference
+- data/ - original data and preprocessed data in txt format
+- bert/ - classification scripts using bert
+    - data/ - folder holding tokenized data
+    - data.py/ - generating tokenized data
+    - run.ipynb - google colab code for model finetuing
+    - inference.ipynb - google colab code for model inference
 
 
 ## Data Before Model Training
-Put all data under data/
-To preprocess data, run "python preprocess.py"
-To augment data, run "python diversity.py"
+- Put all data under data/
+- To preprocess data, run "python preprocess.py"
+- To augment data, run "python diversity.py"
 
 
 ## Bert Based Prediction
-To enter the bert directory, "cd bert"
-To tokenize data, run "data.py"
-Put bert/data on Google Drive as data/
-Run "run.ipynb" from Google Colab for training
-Run "inference.ipynb" from Google Colab for inference
+- To enter the bert directory, "cd bert"
+- To tokenize data, run "data.py"
+- Put bert/data on Google Drive as data/
+- Run "run.ipynb" from Google Colab for training
+- Run "inference.ipynb" from Google Colab for inference
 
 
 
