@@ -41,4 +41,4 @@ def solve(source):
 
 
 if __name__ == '__main__':
-    solve(source='train_and_test_corpus_aug_8_10.txt')
+    solve(source='train_and_test_corpus_aug_8_8.txt')
