@@ -15,7 +15,7 @@ The dataset should have the following files:
 - data/ - original data and preprocessed data in txt format
 - bert/ - classification scripts using bert
     - data/ - folder holding tokenized data
-    - data.py/ - generating tokenized data
+    - data.py - generating tokenized data
     - run.ipynb - google colab code for model finetuing
     - inference.ipynb - google colab code for model inference
 
