@@ -39,7 +39,7 @@ The dataset should have the following files:
     - full.svm.txt, train.svm.txt, val.svm.txt, test.svm.txt sparse matrix file for xgboost training and inference
     - ft_train.txt, ft_val.txt, ft_test.txt labeled text file for FastText
 
-- model/ - saved models from xgboost and FastText
+- models/ - saved models from xgboost and FastText
 
 - predictions/ - generated predictions from xgboost and FastText
 
