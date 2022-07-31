@@ -84,4 +84,8 @@ def solve(source):
     # np.save(os.path.join('data', dest), vectors)
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     solve(source = 'train_and_test_corpus_aug_8_8.txt')
+=======
+    solve(source = 'train_and_test_corpus_8_8.txt')
+>>>>>>> 5032fb5e0307ea1a03c4f42196bb21e017dca25b
