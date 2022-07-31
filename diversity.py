@@ -25,7 +25,7 @@ def compute_diverse(vectors, top_k):
     diverse = sorted(diverse, key=lambda x : x[0])
     return  diverse[0][1]
 
-def solve(source):
+def solve(source, dest):
     
     corpus = []
     _corpus = []
@@ -75,11 +75,13 @@ def solve(source):
         else:
             corpus[i] = corpus[i] + '\n'
     # corpus = list(chain.from_iterable(zip(_corpus, corpus)))
-    with open(os.path.join('data', 'train_and_test_corpus_aug_5.txt'), 'w') as f:
+    with open(os.path.join('data', dest), 'w') as f:
         f.writelines(corpus)
     # with open(os.path.join('data', dest), 'wb') as f:
     #    pickle.dump(vectors, f)
     # np.save(os.path.join('data', dest), vectors)
 
 if __name__ == '__main__':
-    solve(source='train_and_test_corpus.txt')
+    solve(source='train_and_test_corpus.txt', dest='train_and_test_corpus_aug_5.txt')
+    solve(source="train_neg_full_preprocessed.txt", dest="train_neg_full_augmented.txt")
+    solve(source="train_pos_full_preprocessed.txt", dest="train_pos_full_augmented.txt")

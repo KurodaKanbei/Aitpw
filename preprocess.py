@@ -164,3 +164,24 @@ if __name__ == '__main__':
     dest = 'train_and_test_corpus.txt'
     with open(os.path.join('data', dest), 'w', encoding='UTF-8') as f:
         f.writelines(document)
+
+    document = []
+    cnt = 0
+    solve(source = 'train_neg_full.txt')
+    dest = 'train_neg_full_preprocessed.txt'
+    with open(os.path.join('data', dest), 'w', encoding='UTF-8') as f:
+        f.writelines(document)
+    
+    document = []
+    cnt = 0
+    solve(source = 'train_pos_full.txt')
+    dest = 'train_pos_full_preprocessed.txt'
+    with open(os.path.join('data', dest), 'w', encoding='UTF-8') as f:
+        f.writelines(document)
+
+    document = []
+    cnt = 0
+    solve(source = 'test_data.txt', test=True)
+    dest = 'test_data_preprocessed.txt'
+    with open(os.path.join('data', dest), 'w', encoding='UTF-8') as f:
+        f.writelines(document)

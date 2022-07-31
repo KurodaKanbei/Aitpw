@@ -1,10 +1,6 @@
-
-
-## Twitter  Datasets
-
+## Twitter Datasets
 Download the tweet datasets from here:
 http://www.da.inf.ethz.ch/teaching/2018/CIL/material/exercise/twitter-datasets.zip
-
 
 The dataset should have the following files:
 - sample_submission.csv
@@ -14,21 +10,32 @@ The dataset should have the following files:
 - train_neg_full.txt: the full negative training samples
 - train_pos_full.txt: the full positive training samples
 
-## Build the Co-occurence Matrix
 
-To build a co-occurence matrix, run the following commands.  (Remember to put the data files
-in the correct locations)
+## Project Structure
+- data/ - original data and preprocessed data in txt format
+- bert/ - classification scripts using bert
+    - data/ - folder holding tokenized data
+    - data.py - generating tokenized data
+    - run.ipynb - google colab code for model finetuing
+    - inference.ipynb - google colab code for model inference
 
-Note that the cooc.py script takes a few minutes to run, and displays the number of tweets processed.
 
-- build_vocab.sh
-- cut_vocab.sh
-- python3 pickle_vocab.py
-- python3 cooc.py
+## Data Before Model Training (Necessary)
+- Put all data under data/
+- To preprocess data, run "python preprocess.py"
+- To augment data, run "python diversity.py"
 
-##  Template for Glove Question
 
-Your task is to fill in the SGD updates to the template
-glove_template.py
+## Bert Based Prediction
+- To enter the bert directory, "cd bert"
+- To tokenize data, run "data.py"
+- Put bert/data on Google Drive as data/
+- Run "run.ipynb" from Google Colab for training
+- Run "inference.ipynb" from Google Colab for inference
 
-Once you tested your system on the small set of 10% of all tweets, we suggest you run on the full datasets train_pos_full.txt, train_neg_full.txt
+## Back-translation
+- Put data/train_pos_full_preprocessed.txt, data/train_neg_full_preprocessed.txt under data/ on Google Drive
+- Enter the bert directory, "cd bert"
+- run "backtranslation.ipynb" from Google Colab
+
+
