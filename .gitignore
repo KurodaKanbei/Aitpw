@@ -6,3 +6,4 @@
 .idea
 /predictions
 /transformer
+.DS_Store
