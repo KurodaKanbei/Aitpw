@@ -10,9 +10,39 @@ The dataset should have the following files:
 - train_neg_full.txt: the full negative training samples
 - train_pos_full.txt: the full positive training samples
 
+## Envrionment Set Up
+### For Xgboost on Windows
+	- "pip install requirements.txt" 
+### For FastText on Unix
+	- "unzip v0.9.2.zip
+	   cd fastText-0.9.2
+	   make
+	   pip install ."
 
 ## Project Structure
+
+- proprocess.py preprocess all the text files and merge them into a corpus txt file
+
+- diversity.py augment the text after preprocessing
+
+- build_tfidf.py build the sparse matrix based on TF-IDF score
+
+- build_fasttext.py build the labeled dataset for FastText
+
+- main.py train and inference for xgboost
+
+- train_ft.py train and inference for FastText
+
 - data/ - original data and preprocessed data in txt format
+	- train_and_test_corpus.txt the preprocessed data (including test set)
+    - train_and_test_corpus_aug_8_8.txt the augmented data (including test set)
+    - full.svm.txt, train.svm.txt, val.svm.txt, test.svm.txt sparse matrix file for xgboost training and inference
+    - ft_train.txt, ft_val.txt, ft_test.txt labeled text file for FastText
+
+- model/ - saved models from xgboost and FastText
+
+- predictions/ - generated predictions from xgboost and FastText
+
 - bert/ - classification scripts using bert
     - data/ - folder holding tokenized data
     - data.py - generating tokenized data
@@ -20,11 +50,21 @@ The dataset should have the following files:
     - inference.ipynb - google colab code for model inference
 
 
-## Data Before Model Training (Necessary)
+## Preprocessing (Necessary)
 - Put all data under data/
 - To preprocess data, run "python preprocess.py"
 - To augment data, run "python diversity.py"
 
+## Xgboost Based Prediction
+- To build TF-IDF vectors, "python build_tfidf.py"
+- To start trainning models, "python main.py"
+- To continue trainning models from a checkpoint, "python main.py -snapshot [model_name]"
+- To make prediction with a saved model, "python main.py -predict-only -snapshot [model_name]"
+Further parameters please refer to the argparser.
+
+## FastText Based Prediction
+- To set up labeled datasets, "python build_fasttext.py"
+- To start trainning and evaluating models, "python train_ft.py"
 
 ## Bert Based Prediction
 - To enter the bert directory, "cd bert"
