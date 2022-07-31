@@ -12,7 +12,7 @@ The dataset should have the following files:
 
 ## Envrionment Set Up
 ### For Xgboost on Windows
-	- "pip install requirements.txt" 
+	- "pip install -r requirements.txt" 
 ### For FastText on Unix
 	- "unzip v0.9.2.zip
 	   cd fastText-0.9.2
