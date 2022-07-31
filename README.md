@@ -20,7 +20,7 @@ The dataset should have the following files:
     - inference.ipynb - google colab code for model inference
 
 
-## Data Before Model Training
+## Data Before Model Training (Necessary)
 - Put all data under data/
 - To preprocess data, run "python preprocess.py"
 - To augment data, run "python diversity.py"
@@ -33,5 +33,9 @@ The dataset should have the following files:
 - Run "run.ipynb" from Google Colab for training
 - Run "inference.ipynb" from Google Colab for inference
 
+## Back-translation
+- Put data/train_pos_full_preprocessed.txt, data/train_neg_full_preprocessed.txt under data/ on Google Drive
+- Enter the bert directory, "cd bert"
+- run "backtranslation.ipynb" from Google Colab
 
 
